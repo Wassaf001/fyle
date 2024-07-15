@@ -1,0 +1,7 @@
+<div class="body">
+    <app-input></app-input>
+    <app-filter (toggleView)="toggleView($event)"></app-filter>
+    <!-- <h3>{{ wasTable }}</h3> -->
+    <app-pages *ngIf="wasTable"></app-pages>
+    <app-graph *ngIf="!wasTable"></app-graph>
+</div>

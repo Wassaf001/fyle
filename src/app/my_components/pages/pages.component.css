@@ -1,0 +1,38 @@
+table {
+  width: 100%;
+}
+.mat-mdc-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+.search{
+  padding-right: 75px;
+}
+.drop{
+  padding-left: 75px;
+  padding-bottom: 30px;
+}
+td, th {
+  width: 25%;
+}
+
+.c_table{
+  padding-top: 25px;
+  padding-right: 25px;
+  padding-left: 25px;
+  background-color: rgb(245, 244, 244);
+}
+.card{ 
+  justify-content: center
+}
+.toggle{
+  padding-bottom: 20px;
+}
+
+.paginator{
+  margin: 100px;
+  padding: 25px;
+}
+.page{
+  background-color: rgb(245, 244, 244);
+}

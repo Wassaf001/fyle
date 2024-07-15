@@ -1,0 +1,24 @@
+.toggle{
+    padding-bottom: 20px;
+    padding-top: 25px;
+    padding-right: 25px;
+    padding-left: 25px;
+    justify-content:flex-start;
+    box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  .custom-toggle {
+    border: none;
+    box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #e0ebfa;
+  }
+  
+  .custom-toggle mat-button-toggle {
+    border: none;
+    color: #176593;
+    background-color: transparent;
+  }
+  
+  .custom-toggle mat-button-toggle.mat-button-toggle-checked {
+    color: #fff;
+    background-color: #0277bd;
+  }

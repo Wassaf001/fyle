@@ -1,0 +1,35 @@
+<div class="input-form">
+  <form class="example-form">
+    <mat-form-field class="example-half-width">
+      <mat-label>User Name*</mat-label>
+      <input matInput #username placeholder=" " value="Smith">
+    </mat-form-field>
+    <table class="example-full-width" cellspacing="0">
+      <tbody>
+        <tr>
+          <td>
+            <mat-form-field class="example-full-width">
+              <mat-label>Workout Type*</mat-label>
+              <mat-select placeholder="Select workout type" #workoutType>
+                <mat-option value="one">Cycling</mat-option>
+                <mat-option value="two">Running</mat-option>
+                <mat-option value="three">Swimming</mat-option>
+                <mat-option value="four">Yoga</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="example-full-width">
+              <mat-label>Workout Minutes*</mat-label>
+              <input matInput #workoutMinutes maxlength="2" placeholder="Ex. 63" value="60">
+            </mat-form-field>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="example-button-row">
+      <button mat-raised-button (click)="addWorkout(username.value, workoutType.value, +workoutMinutes.value)">Add Workout</button>
+    </div>
+  </form>
+</div>

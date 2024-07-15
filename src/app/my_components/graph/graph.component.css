@@ -1,0 +1,13 @@
+.data{
+  padding: 25px;
+  width: 500px;
+}
+.mat-elevation-z8{
+  border-radius: 5px;
+  box-shadow: none;
+  background-color: #ffffff;
+  padding: 20px;
+}
+.body{
+  background-color: rgb(245, 244, 244);
+}
