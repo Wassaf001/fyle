@@ -1,6 +1,15 @@
+.body{
+  background-color: rgb(245, 244, 244);
+  display: flex;
+}
 .data{
   padding: 25px;
   width: 500px;
+}
+.graph{
+  background-color: #ffffff;
+  padding: 25px;
+  width: 1000px;
 }
 .mat-elevation-z8{
   border-radius: 5px;
@@ -8,6 +17,7 @@
   background-color: #ffffff;
   padding: 20px;
 }
-.body{
-  background-color: rgb(245, 244, 244);
+.selected {
+  background-color: rgb(188, 188, 188); 
 }
+

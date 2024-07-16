@@ -30,8 +30,13 @@ td, th {
 }
 
 .paginator{
-  margin: 100px;
-  padding: 25px;
+  margin-top: 10px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  border: none;
+  background-color: rgb(245, 244, 244);
+  display: flex;
+  justify-content: center;
 }
 .page{
   background-color: rgb(245, 244, 244);

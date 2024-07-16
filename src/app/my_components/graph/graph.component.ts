@@ -1,74 +1,119 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {MatRippleModule} from '@angular/material/core';
 import {MatTableModule} from '@angular/material/table';
+import { ChartModule } from 'primeng/chart';
+import { WorkoutService } from '../../services/workout.service';
 
-const users = [
-  {
-    id: 1,
-    name: 'John Doe',
-    workouts: [
-      { type: 'Running', minutes: 30 },
-      { type: 'Cycling', minutes: 45 }
-    ]
-  },
-  {
-    id: 2,
-    name: 'Jane Doe',
-    workouts: [
-      { type: 'Running', minutes: 30 },
-      { type: 'Swimming', minutes: 30 }
-    ]
-  },
-  {
-    id: 3,
-    name: 'Mike Johnson',
-    workouts: [
-      { type: 'Yoga', minutes: 50 },
-      { type: 'Cycling', minutes: 40 }
-    ]
-  },
-  {
-    id: 4,
-    name: 'Mike Johnson',
-    workouts: [
-      { type: 'Yoga', minutes: 50 },
-      { type: 'Cycling', minutes: 40 }
-    ]
-  },
-  {
-    id: 5,
-    name: 'Mike Johnson',
-    workouts: [
-      { type: 'Yoga', minutes: 50 },
-      { type: 'Cycling', minutes: 40 }
-    ]
-  },
-  {
-    id: 6,
-    name: 'Mike Johnson',
-    workouts: [
-      { type: 'Yoga', minutes: 50 },
-      { type: 'Cycling', minutes: 40 }
-    ]
-  },
-  {
-    id: 7,
-    name: 'Mike Johnson',
-    workouts: [
-      { type: 'Yoga', minutes: 50 },
-      { type: 'Cycling', minutes: 40 }
-    ]
-  }
-];
+interface Workout {
+  type: string;
+  minutes: number;
+}
+
+interface User{
+  id: number;
+  name: string;
+  workouts: Workout[];
+}
 
 @Component({
   selector: 'app-graph',
   standalone: true,
-  imports: [MatRippleModule, MatTableModule],
+  imports: [MatRippleModule, MatTableModule, ChartModule],
   templateUrl: './graph.component.html',
-  styleUrl: './graph.component.css'
+  styleUrls: ['./graph.component.css']
 })
-export class GraphComponent {
+
+export class GraphComponent implements OnInit{
   displayedColumns: string[] = ['name'];
-  dataSource = users; 
+  dataSource : any;
+  chartLabels: any;
+  chartData: any;
+  chartOptions = {
+    responsive: true,
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  };
+
+  constructor(private workoutService: WorkoutService) { }
+
+  ngOnInit() {
+   this.dataSource = this.workoutService.getUsers();
+   this.chartLabels = this.getWorkoutTypes();
+   this.chartData = this.getChartData();
+   this.workoutService.workoutData$.subscribe(data => {
+  if (data) {
+    this.workoutService.updateUserWorkouts(data.username, { type: data.workoutType, minutes: data.workoutMinutes });
+    this.dataSource = this.workoutService.getUsers();
+    this.chartLabels = this.getWorkoutTypes();
+    this.updateChartData();
+  }
+});
+  }
+  
+  getWorkoutTypes() {
+    const types = new Set();
+    this.dataSource.forEach((user:User) => user.workouts.forEach((workout: Workout) => types.add(workout.type)));
+    return Array.from(types);
+  }
+
+  getWorkoutMinutes(user: any, labels: string[]) {
+    const minutes: { [key: string]: number } = {}; 
+    user.workouts.forEach((workout: Workout) => {
+      minutes[workout.type] = (minutes[workout.type] || 0) + workout.minutes;
+    });
+    return labels.map(type => minutes[type] || 0);
+  }
+
+  getChartData() {
+    return {
+      labels: this.chartLabels,
+      datasets: this.dataSource.slice(0, 5).map((user:User) => ({
+        label: user.name,
+        data: this.getWorkoutMinutes(user, this.chartLabels as string[]),
+        fill: false,
+        borderColor: '#' + Math.floor(Math.random()*16777215).toString(16), 
+      }))
+    };
+  }
+
+  onHeaderClicked() {
+    this.chartData = {
+      labels: this.chartLabels,
+      datasets: this.dataSource.map((user: User) => ({
+        label: user.name,
+        data: this.getWorkoutMinutes(user, this.chartLabels as string[]),
+        fill: false,
+        borderColor: '#' + Math.floor(Math.random()*16777215).toString(16), 
+      }))
+    };
+  }
+
+  selectedRow: any;
+  onRowClicked(row: any) {
+    this.selectedRow = row;
+    this.chartData = {
+      labels: this.chartLabels,
+      datasets: [{
+        label: row.name,
+        data: this.getWorkoutMinutes(row, this.chartLabels as string[]),
+        fill: false,
+        borderColor: '#' + Math.floor(Math.random()*16777215).toString(16),
+      }]
+    };
+  }
+
+  updateChartData() {
+    this.chartData = {
+      labels: this.chartLabels,
+      datasets: this.dataSource.map((user: User) => ({
+        label: user.name,
+        data: this.getWorkoutMinutes(user, this.chartLabels as string[]),
+        fill: false,
+        borderColor: '#' + Math.floor(Math.random()*16777215).toString(16), 
+      }))
+    };
+  }
 }

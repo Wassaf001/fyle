@@ -11,6 +11,7 @@ import { MatOption } from '@angular/material/select';
 import { MatSelect } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
 import { DropdownModule } from 'primeng/dropdown';
+import { WorkoutService } from '../../services/workout.service';
 
 @Component({
   selector: 'app-input',
@@ -22,9 +23,10 @@ import { DropdownModule } from 'primeng/dropdown';
 })
 export class InputComponent {
   @Output() workoutAdded = new EventEmitter<{username: string, workoutType: string, workoutMinutes: number}>();
-  
+  constructor(private workoutService: WorkoutService) { }
   addWorkout(username: string, workoutType: string, workoutMinutes: number) {
     console.log(`Adding workout: username=${username}, workoutType=${workoutType}, workoutMinutes=${workoutMinutes}`);
     this.workoutAdded.emit({username, workoutType, workoutMinutes});
+    this.workoutService.updateWorkoutData({username, workoutType, workoutMinutes});
   }
 }
