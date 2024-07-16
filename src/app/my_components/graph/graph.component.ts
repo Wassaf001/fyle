@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {MatRippleModule} from '@angular/material/core';
-import {MatTableModule} from '@angular/material/table';
+import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import { ChartModule } from 'primeng/chart';
 import { WorkoutService } from '../../services/workout.service';
+import { ChangeDetectorRef } from '@angular/core';
 
 interface Workout {
   type: string;
@@ -25,7 +26,7 @@ interface User{
 
 export class GraphComponent implements OnInit{
   displayedColumns: string[] = ['name'];
-  dataSource : any;
+  dataSource : MatTableDataSource<User>;
   chartLabels: any;
   chartData: any;
   chartOptions = {
@@ -37,25 +38,28 @@ export class GraphComponent implements OnInit{
     }
   };
 
-  constructor(private workoutService: WorkoutService) { }
+  constructor(private workoutService: WorkoutService, private cd: ChangeDetectorRef) {
+    this.dataSource = new MatTableDataSource<User>(this.workoutService.getUsers());
+  }
 
   ngOnInit() {
-   this.dataSource = this.workoutService.getUsers();
+   this.dataSource.data = this.workoutService.getUsers();
    this.chartLabels = this.getWorkoutTypes();
    this.chartData = this.getChartData();
    this.workoutService.workoutData$.subscribe(data => {
   if (data) {
     this.workoutService.updateUserWorkouts(data.username, { type: data.workoutType, minutes: data.workoutMinutes });
-    this.dataSource = this.workoutService.getUsers();
+    this.dataSource.data = this.workoutService.getUsers();
     this.chartLabels = this.getWorkoutTypes();
     this.updateChartData();
+    this.cd.detectChanges();
   }
 });
   }
   
   getWorkoutTypes() {
     const types = new Set();
-    this.dataSource.forEach((user:User) => user.workouts.forEach((workout: Workout) => types.add(workout.type)));
+    this.dataSource.data.forEach((user:User) => user.workouts.forEach((workout: Workout) => types.add(workout.type)));
     return Array.from(types);
   }
 
@@ -70,7 +74,7 @@ export class GraphComponent implements OnInit{
   getChartData() {
     return {
       labels: this.chartLabels,
-      datasets: this.dataSource.slice(0, 5).map((user:User) => ({
+      datasets: this.dataSource.data.slice(0, 5).map((user:User) => ({
         label: user.name,
         data: this.getWorkoutMinutes(user, this.chartLabels as string[]),
         fill: false,
@@ -82,7 +86,7 @@ export class GraphComponent implements OnInit{
   onHeaderClicked() {
     this.chartData = {
       labels: this.chartLabels,
-      datasets: this.dataSource.map((user: User) => ({
+      datasets: this.dataSource.data.map((user: User) => ({
         label: user.name,
         data: this.getWorkoutMinutes(user, this.chartLabels as string[]),
         fill: false,
@@ -108,7 +112,7 @@ export class GraphComponent implements OnInit{
   updateChartData() {
     this.chartData = {
       labels: this.chartLabels,
-      datasets: this.dataSource.map((user: User) => ({
+      datasets: this.dataSource.data.map((user: User) => ({
         label: user.name,
         data: this.getWorkoutMinutes(user, this.chartLabels as string[]),
         fill: false,

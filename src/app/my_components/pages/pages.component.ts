@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { PaginatorModule } from 'primeng/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { InputComponent } from '../input/input.component';
+import { ChangeDetectorRef } from '@angular/core';
 import { WorkoutService } from '../../services/workout.service';
 
 export interface Workout {
@@ -37,8 +38,8 @@ export class PagesComponent implements AfterViewInit {
   @ViewChild(MatSort) sort: MatSort | undefined;
 
 
-  constructor(private workoutService: WorkoutService) {
-     this.dataSource = new MatTableDataSource(this.workoutService.getUsers());
+  constructor(private workoutService: WorkoutService, private cd: ChangeDetectorRef) {
+    this.dataSource = new MatTableDataSource(this.workoutService.getUsers());
   }
 
   ngAfterViewInit() {
@@ -49,6 +50,7 @@ export class PagesComponent implements AfterViewInit {
         const { username, workoutType, workoutMinutes } = data;
         this.workoutService.updateUserWorkouts(username, { type: workoutType, minutes: workoutMinutes });
         this.dataSource.data = this.workoutService.getUsers();
+        this.cd.detectChanges();
       }
     });
   }
