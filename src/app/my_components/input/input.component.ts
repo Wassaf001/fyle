@@ -46,6 +46,7 @@ export class InputComponent {
       this.errorMessageType.next('');
     }
   }
+
   updateErrorMessageinMinutes() {
     if (this.workoutMinutesControl.hasError('required')) {
       this.errorMessageMinutes.next('You must enter a value');
@@ -56,6 +57,10 @@ export class InputComponent {
     }
 }
   addWorkout(username: string, workoutType: string, workoutMinutes: number) {
+    if (workoutMinutes > 99) {
+      this.errorMessageMinutes.next('Input must be a number <= 99');
+      return;
+    }
     console.log(`Adding workout: username=${username}, workoutType=${workoutType}, workoutMinutes=${workoutMinutes}`);
     this.workoutAdded.emit({username, workoutType, workoutMinutes});
     this.workoutService.updateWorkoutData({username, workoutType, workoutMinutes});
