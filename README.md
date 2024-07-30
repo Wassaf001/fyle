@@ -66,7 +66,7 @@ The workout list is displayed in a table format with options to search by user n
 
 
 ### Charts 
-Visualize the workout progress of users through charts. This feature is implemented using chart library Chart.js 
+Visualize the workout progress of users through charts. This feature is implemented using PrimeNG Chart
 
 
 
