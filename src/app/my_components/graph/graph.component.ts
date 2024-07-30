@@ -47,7 +47,7 @@ export class GraphComponent implements OnInit{
    this.chartLabels = this.getWorkoutTypes();
    this.chartData = this.getChartData();
    this.workoutService.workoutData$.subscribe(data => {
-  if (data) {
+  if (data && data.username && data.workoutType && data.workoutMinutes) {
     this.workoutService.updateUserWorkouts(data.username, { type: data.workoutType, minutes: data.workoutMinutes });
     this.dataSource.data = this.workoutService.getUsers();
     this.chartLabels = this.getWorkoutTypes();

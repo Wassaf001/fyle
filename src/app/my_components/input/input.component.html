@@ -1,33 +1,35 @@
 <div class="input-form">
   <form class="example-form">
     <mat-form-field class="example-half-width">
-      <mat-label>User Name*</mat-label>
-      <input matInput #username placeholder=" " value="Smith">
+      <mat-label>User Name</mat-label>
+      <input matInput #username placeholder=" " [formControl]="usernameControl" value="Smith" (blur)="updateErrorMessageinName()" required>
+      <mat-error *ngIf="usernameControl.invalid">{{errorMessageName.getValue()}}</mat-error>
     </mat-form-field>
     <table class="example-full-width" cellspacing="0">
       <tbody>
         <tr>
           <td>
             <mat-form-field class="example-full-width">
-              <mat-label>Workout Type*</mat-label>
-              <mat-select placeholder="Select workout type" #workoutType>
+              <mat-label>Workout Type</mat-label>
+              <mat-select placeholder="Select workout type" #workoutType [formControl]="workoutTypeControl" (blur)="updateErrorMessageinWorkout()" required>
                 <mat-option value="Cycling">Cycling</mat-option>
                 <mat-option value="Running">Running</mat-option>
                 <mat-option value="Swimming">Swimming</mat-option>
                 <mat-option value="Yoga">Yoga</mat-option>
               </mat-select>
+              <mat-error *ngIf="workoutTypeControl.invalid">{{errorMessageType.getValue()}}</mat-error>
             </mat-form-field>
           </td>
           <td>
             <mat-form-field class="example-full-width">
-              <mat-label>Workout Minutes*</mat-label>
-              <input matInput #workoutMinutes maxlength="2" placeholder="Ex. 63" value="60">
+              <mat-label>Workout Minutes</mat-label>
+              <input matInput #workoutMinutes pattern="^[0-9]{1,2}$" placeholder="Ex. 63" value="60" [formControl]="workoutMinutesControl" (blur)="updateErrorMessageinMinutes()" required>
+              <mat-error *ngIf="workoutMinutesControl.invalid">{{errorMessageMinutes.getValue()}}</mat-error>
             </mat-form-field>
           </td>
         </tr>
       </tbody>
     </table>
-
     <div class="example-button-row">
       <button mat-raised-button (click)="addWorkout(username.value, workoutType.value, +workoutMinutes.value)">Add Workout</button>
     </div>

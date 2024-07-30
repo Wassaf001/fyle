@@ -46,7 +46,7 @@ export class PagesComponent implements AfterViewInit {
     this.dataSource.paginator = this.paginator || null;
     this.dataSource.sort = this.sort || null;
     this.workoutService.workoutData$.subscribe(data => {
-      if (data !== null) {
+      if (data !== null && data.username && data.workoutType && data.workoutMinutes) {
         const { username, workoutType, workoutMinutes } = data;
         this.workoutService.updateUserWorkouts(username, { type: workoutType, minutes: workoutMinutes });
         this.dataSource.data = this.workoutService.getUsers();
